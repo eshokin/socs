@@ -1,13 +1,13 @@
-package com.eshokin.socs.core;
+package com.eshokin.socs.api;
 
-import com.eshokin.socs.core.schemas.requests.GetStatisticsMethodRequest;
-import com.eshokin.socs.core.schemas.responses.GetStatisticsMethodResponse;
+import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
+import com.eshokin.socs.api.schemas.responses.GetStatisticsMethodResponse;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface ServerApi {
+public interface Api {
 
     @POST("/getStatisticsMethod")
     Observable<GetStatisticsMethodResponse> getStatisticsMethod(@Body GetStatisticsMethodRequest request);

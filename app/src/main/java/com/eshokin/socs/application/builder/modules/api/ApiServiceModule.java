@@ -1,18 +1,18 @@
 package com.eshokin.socs.application.builder.modules.api;
 
 import com.eshokin.socs.application.builder.AppScope;
-import com.eshokin.socs.core.ServerApi;
-import com.eshokin.socs.core.ClientApiService;
+import com.eshokin.socs.api.Api;
+import com.eshokin.socs.api.ApiService;
 
 import dagger.Module;
 import dagger.Provides;
 
 @Module(includes = {ApiModule.class})
-public class ClientApiModule {
+public class ApiServiceModule {
 
     @AppScope
     @Provides
-    public ClientApiService provideServerApiService(ServerApi api) {
-        return new ClientApiService(api);
+    public ApiService provideApiService(Api api) {
+        return new ApiService(api);
     }
 }

@@ -41,5 +41,4 @@ public class RetrofitModule {
     RxJava2CallAdapterFactory provideRxAdapter() {
         return RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io());
     }
-
 }

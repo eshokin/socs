@@ -1,4 +1,4 @@
-package com.eshokin.socs.core.schemas.requests;
+package com.eshokin.socs.api.schemas.requests;
 
 import com.google.gson.annotations.SerializedName;
 
