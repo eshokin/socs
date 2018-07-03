@@ -1,6 +1,12 @@
 package com.eshokin.socs.api;
 
+import com.eshokin.socs.jobs.DataGenerationJob;
+import com.path.android.jobqueue.JobManager;
+
 import java.io.IOException;
+import java.util.Date;
+
+import javax.inject.Inject;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -10,11 +16,16 @@ import okhttp3.ResponseBody;
 
 public class MockServerInterceptor implements Interceptor {
 
+    @Inject
+    JobManager mJobManager;
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = null;
         if (chain.request() != null && chain.request().body() != null) {
 
+
+            mJobManager.addJobInBackground(new DataGenerationJob(new Date(), new Date()));
 
             String responseString="Re re";
             response = new Response.Builder()

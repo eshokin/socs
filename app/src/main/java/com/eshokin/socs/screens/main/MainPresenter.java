@@ -35,7 +35,7 @@ public class MainPresenter extends BasePresenter<MainView> {
         Disposable disposable = observable
                 .compose(RxUtils.applySchedulers())
                 .subscribe(response -> {
-                    getViewState().showLoading(true);
+                    getViewState().showLoading(false);
 
                     /*
                     if (response != null && response.getStatus() != null && response.getStatus().isOk() && response.getResult().getValues() != null) {
@@ -58,7 +58,7 @@ public class MainPresenter extends BasePresenter<MainView> {
 
                     } */
                 }, error -> {
-                    getViewState().showLoading(true);
+                    getViewState().showLoading(false);
                 });
         unSubscribeOnDestroy(disposable);
     }
