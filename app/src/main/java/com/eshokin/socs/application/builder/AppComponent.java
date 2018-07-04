@@ -5,7 +5,10 @@ import com.eshokin.socs.application.builder.modules.api.ApiServiceModule;
 import com.eshokin.socs.application.builder.modules.calculating.CalculatingModel;
 import com.eshokin.socs.application.builder.modules.context.ContextModule;
 import com.eshokin.socs.application.builder.modules.job.JobManagerModel;
-import com.eshokin.socs.jobs.DataGenerationJob;
+import com.eshokin.socs.jobs.CalculateAverageJob;
+import com.eshokin.socs.jobs.CalculateInterquartileRangeJob;
+import com.eshokin.socs.jobs.CalculateMedianJob;
+import com.eshokin.socs.jobs.SearchMinMaxJob;
 import com.eshokin.socs.screens.main.MainActivity;
 import com.eshokin.socs.screens.main.MainPresenter;
 
@@ -21,5 +24,11 @@ public interface AppComponent {
 
     void inject(MockServerInterceptor interceptor);
 
-    void inject(DataGenerationJob job);
+    void inject(SearchMinMaxJob job);
+
+    void inject(CalculateAverageJob job);
+
+    void inject(CalculateMedianJob job);
+
+    void inject(CalculateInterquartileRangeJob job);
 }

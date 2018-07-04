@@ -1,16 +1,26 @@
 package com.eshokin.socs.jobs;
 
+import com.eshokin.socs.api.schemas.Point;
+import com.eshokin.socs.application.AppController;
+import com.eshokin.socs.calculating.Calculating;
 import com.path.android.jobqueue.Job;
 import com.path.android.jobqueue.Params;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class SearchMinMaxJob extends Job {
 
-    protected SearchMinMaxJob() {
+    private List<Point> mPoints;
+
+    @Inject
+    Calculating mCalculating;
+
+    public SearchMinMaxJob(List<Point> points) {
         super(new Params(Priority.MID).groupBy(SearchMinMaxJob.class.getName()));
+        AppController.getComponent().inject(this);
+        mPoints = points;
     }
 
     @Override
@@ -20,10 +30,8 @@ public class SearchMinMaxJob extends Job {
 
     @Override
     public void onRun() throws Throwable {
-        List<Integer> list = Arrays.asList(100,2,3,4,5,6,7,67,2,32);
-
-        int min = Collections.min(list);
-        int max = Collections.max(list);
+        double max = mCalculating.getMax(mPoints);
+        double min = mCalculating.getMin(mPoints);
     }
 
     @Override

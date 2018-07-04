@@ -2,13 +2,16 @@ package com.eshokin.socs.api;
 
 import android.support.annotation.NonNull;
 
+import com.eshokin.socs.api.schemas.Point;
+import com.eshokin.socs.api.schemas.ResponseSchema;
 import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
+import com.eshokin.socs.api.schemas.responses.GetStatisticsMethodResponse;
 import com.eshokin.socs.application.AppController;
-import com.eshokin.socs.jobs.DataGenerationJob;
+import com.eshokin.socs.calculating.Calculating;
 import com.google.gson.Gson;
-import com.path.android.jobqueue.JobManager;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,7 +28,7 @@ public class MockServerInterceptor implements Interceptor {
     private Gson mGson;
 
     @Inject
-    JobManager mJobManager;
+    Calculating mCalculating;
 
     public MockServerInterceptor() {
         AppController.getComponent().inject(this);
@@ -34,18 +37,26 @@ public class MockServerInterceptor implements Interceptor {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
-        String responseString = "Error";
         Response.Builder response = new Response.Builder();
-        response.request(chain.request()).protocol(Protocol.HTTP_1_0).addHeader("content-type", "application/json");
+        response.request(chain.request()).code(200).protocol(Protocol.HTTP_1_0).addHeader("content-type", "application/json");
+        GetStatisticsMethodResponse statisticsMethodResponse = new GetStatisticsMethodResponse();
+        statisticsMethodResponse.setResult(new GetStatisticsMethodResponse.Result());
+        statisticsMethodResponse.setStatus(new ResponseSchema.Status());
+        statisticsMethodResponse.getStatus().setError("internal_error");
+        statisticsMethodResponse.getStatus().setMessage("Internal error");
+
         if (chain.request() != null && chain.request().body() != null) {
             String body = getRequestBody(chain.request().body());
-            GetStatisticsMethodRequest request = new Gson().fromJson(body, GetStatisticsMethodRequest.class);
+            GetStatisticsMethodRequest request = mGson.fromJson(body, GetStatisticsMethodRequest.class);
             if (request != null) {
-                mJobManager.addJobInBackground(new DataGenerationJob(request.getStartInterval(), request.getEndInterval()));
+                List<Point> points = mCalculating.generateStatistics(request.getStartInterval(), request.getEndInterval());
+                statisticsMethodResponse.getResult().setPoints(points);
+                statisticsMethodResponse.getStatus().setError("ok");
+                statisticsMethodResponse.getStatus().setMessage("ok");
             }
-            responseString = body;
         }
-        return response.code(200).message(responseString).body(ResponseBody.create(MediaType.parse("application/json"), responseString.getBytes())).build();
+        String responseString = mGson.toJson(statisticsMethodResponse);
+        return response.message(responseString).body(ResponseBody.create(MediaType.parse("application/json"), responseString.getBytes())).build();
     }
 
     private String getRequestBody(RequestBody requestBody) throws IOException {

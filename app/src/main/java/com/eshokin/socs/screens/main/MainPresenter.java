@@ -2,13 +2,17 @@ package com.eshokin.socs.screens.main;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.eshokin.socs.api.ApiService;
+import com.eshokin.socs.api.schemas.Point;
 import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
 import com.eshokin.socs.api.schemas.responses.GetStatisticsMethodResponse;
 import com.eshokin.socs.application.AppController;
+import com.eshokin.socs.calculating.Calculating;
 import com.eshokin.socs.screens.base.BasePresenter;
 import com.eshokin.socs.utils.RxUtils;
+import com.path.android.jobqueue.JobManager;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,6 +24,9 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     @Inject
     ApiService mApiService;
+
+    @Inject
+    JobManager mJobManager;
 
     public MainPresenter() {
         AppController.getComponent().inject(this);
@@ -36,29 +43,19 @@ public class MainPresenter extends BasePresenter<MainView> {
                 .compose(RxUtils.applySchedulers())
                 .subscribe(response -> {
                     getViewState().showLoading(false);
+                    if (response != null && response.getStatus() != null && response.getStatus().isOk() && response.getResult().getPoints() != null) {
+                        List<Point> points = response.getResult().getPoints();
+                        if (points.size() > 0) {
 
-                    /*
-                    if (response != null && response.getStatus() != null && response.getStatus().isOk() && response.getResult().getValues() != null) {
-                        ActionOutput[] actionOutputs = response.getResult().getValues();
-                        if (actionOutputs.length > 0) {
-                            getViewState().setOffers(Arrays.asList(response.getResult().getValues()));
-                            if (!TextUtils.isEmpty(mSelectedOfferId)) {
-                                for (int i = 0; i < response.getResult().getValues().length; i++) {
-                                    if (response.getResult().getValues()[i].get_id().equals(mSelectedOfferId)) {
-                                        getViewState().selectOffer(i);
-                                        break;
-                                    }
-                                }
-
-                            }
                         } else {
-
+                            // empty list
                         }
                     } else {
-
-                    } */
+                        // server internal error
+                    }
                 }, error -> {
                     getViewState().showLoading(false);
+                    // server not responding
                 });
         unSubscribeOnDestroy(disposable);
     }
