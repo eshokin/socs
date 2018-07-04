@@ -1,84 +1,56 @@
 package com.eshokin.socs.api;
 
+import android.support.annotation.NonNull;
+
+import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
+import com.eshokin.socs.application.AppController;
 import com.eshokin.socs.jobs.DataGenerationJob;
+import com.google.gson.Gson;
 import com.path.android.jobqueue.JobManager;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.inject.Inject;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.Buffer;
 
 public class MockServerInterceptor implements Interceptor {
+
+    private Gson mGson;
 
     @Inject
     JobManager mJobManager;
 
+    public MockServerInterceptor() {
+        AppController.getComponent().inject(this);
+        mGson = new Gson();
+    }
+
     @Override
-    public Response intercept(Chain chain) throws IOException {
-        Response response = null;
+    public Response intercept(@NonNull Chain chain) throws IOException {
+        String responseString = "Error";
+        Response.Builder response = new Response.Builder();
+        response.request(chain.request()).protocol(Protocol.HTTP_1_0).addHeader("content-type", "application/json");
         if (chain.request() != null && chain.request().body() != null) {
-
-
-            mJobManager.addJobInBackground(new DataGenerationJob(new Date(), new Date()));
-
-            String responseString="Re re";
-            response = new Response.Builder()
-                    .code(200)
-                    .message(responseString)
-                    .request(chain.request())
-                    .protocol(Protocol.HTTP_1_0)
-                    .body(ResponseBody.create(MediaType.parse("application/json"), responseString.getBytes()))
-                    .addHeader("content-type", "application/json")
-                    .build();
-        } else {
-            // error
-            response = chain.proceed(chain.request());
+            String body = getRequestBody(chain.request().body());
+            GetStatisticsMethodRequest request = new Gson().fromJson(body, GetStatisticsMethodRequest.class);
+            if (request != null) {
+                mJobManager.addJobInBackground(new DataGenerationJob(request.getStartInterval(), request.getEndInterval()));
+            }
+            responseString = body;
         }
-        return response;
+        return response.code(200).message(responseString).body(ResponseBody.create(MediaType.parse("application/json"), responseString.getBytes())).build();
+    }
 
-        /*
-        if(BuildConfig.DEBUG) {
-            Log.d(TAG, "---- DEBUG --- DEBUG -- DEBUG - DEBUG -- DEBUG --- DEBUG ----");
-            Log.d(TAG, "----                FAKE SERVER RESPONSES                ----");
-            String responseString;
-            // Get Request URI.
-            final URI uri = chain.request().uri();
-            Log.d(TAG, "---- Request URL: " + uri.toString());
-            // Get Query String.
-            final String query = uri.getQuery();
-            // Parse the Query String.
-            final String[] parsedQuery = query.split("=");
-            if(parsedQuery[0].equalsIgnoreCase("id") && parsedQuery[1].equalsIgnoreCase("1")) {
-                responseString = TEACHER_ID_1;
-            }
-            else if(parsedQuery[0].equalsIgnoreCase("id") && parsedQuery[1].equalsIgnoreCase("2")){
-                responseString = TEACHER_ID_2;
-            }
-            else {
-                responseString = "";
-            }
-
-            response = new Response.Builder()
-                    .code(200)
-                    .message(responseString)
-                    .request(chain.request())
-                    .protocol(Protocol.HTTP_1_0)
-                    .body(ResponseBody.create(MediaType.parse("application/json"), responseString.getBytes()))
-                    .addHeader("content-type", "application/json")
-                    .build();
-
-            //Log.d(TAG, "---- DEBUG --- DEBUG -- DEBUG - DEBUG -- DEBUG --- DEBUG ----");
-        }
-        else {
-            response = chain.proceed(chain.request());
-        } */
-
-
+    private String getRequestBody(RequestBody requestBody) throws IOException {
+        Buffer buffer = new Buffer();
+        requestBody.writeTo(buffer);
+        return buffer.readUtf8();
     }
 }

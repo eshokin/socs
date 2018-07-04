@@ -10,7 +10,16 @@ public class GetStatisticsMethodRequest {
     private Date startInterval;
 
     @SerializedName("endInterval")
+
     private Date endInterval;
+
+    public Date getStartInterval() {
+        return startInterval;
+    }
+
+    public Date getEndInterval() {
+        return endInterval;
+    }
 
     public void setStartInterval(Date startInterval) {
         this.startInterval = startInterval;

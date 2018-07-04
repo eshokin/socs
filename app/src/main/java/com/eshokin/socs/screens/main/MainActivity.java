@@ -22,6 +22,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -111,13 +112,15 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
         YAxis rightAxis = mChart.getAxisRight();
         rightAxis.setEnabled(false);
-
-
     }
 
     @OnClick({R.id.activity_main_load_button})
     public void getStatistics() {
-        mMainPresenter.getStatistics(new Date(), new Date());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -5);
+
+        mMainPresenter.getStatistics(calendar.getTime(), new Date());
 
         //setData(100, 30);
     }

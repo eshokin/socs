@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Симуляция и расчет статистики</string>
+
+    <string name="activity_main_load_button">Загрузить</string>
+</resources>

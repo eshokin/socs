@@ -1,4 +1,4 @@
-package com.eshokin.socs.application.builder.modules.job_manager;
+package com.eshokin.socs.application.builder.modules.job;
 
 import android.content.Context;
 import android.util.Log;
@@ -48,8 +48,8 @@ public class JobManagerModel {
                     }
                 })
                 .minConsumerCount(1)
-                .maxConsumerCount(3)
-                .loadFactor(3)
+                .maxConsumerCount(4)
+                .loadFactor(4)
                 .consumerKeepAlive(120)
                 .build();
     }
