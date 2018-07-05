@@ -1,14 +1,16 @@
 package com.eshokin.socs.screens.main;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.eshokin.socs.R;
+import com.eshokin.socs.api.schemas.Point;
 import com.eshokin.socs.application.AppController;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -25,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +45,23 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @BindView(R.id.activity_main_chart)
     LineChart mChart;
+
+    @BindView(R.id.activity_main_min_value)
+    TextView mMin;
+
+    @BindView(R.id.activity_main_max_value)
+    TextView mMax;
+
+    @BindView(R.id.activity_main_average_value)
+    TextView mAverage;
+
+    @BindView(R.id.activity_main_median_value)
+    TextView mMedian;
+
+    @BindView(R.id.activity_main_interquartile_range_value)
+    TextView mInterquartileRange;
+
+    private AlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,12 +153,20 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void hideDialog() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showPoints(List<Point> points) {
 
     }
 
     @Override
     public void showMinMaxValue(Double min, Double max) {
-
+        mMin.setText(String.valueOf(min));
+        mMax.setText(String.valueOf(max));
     }
 
     @Override
@@ -148,7 +176,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showAverageValue(Double average) {
-
+        mAverage.setText(String.valueOf(average));
     }
 
     @Override
@@ -158,7 +186,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showMedianValue(Double median) {
-
+        mMedian.setText(String.valueOf(median));
     }
 
     @Override
@@ -168,7 +196,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showInterquartileRangeValue(Double interquartileRange) {
-
+        mInterquartileRange.setText(String.valueOf(interquartileRange));
     }
 
     @Override
@@ -197,7 +225,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
             random.nextFloat();
 
             float y = random.nextFloat(); //getRandom(range, 50);
-            values.add(new Entry(x, getRate())); // add one entry per hour
+           // values.add(new Entry(x, getRate())); // add one entry per hour
         }
 
         // create a dataset and give it a type
@@ -221,13 +249,5 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         // set data
         mChart.setData(data);
         mChart.invalidate();
-    }
-
-    private Float oldRange = 100f;
-
-    private Float getRate() {
-        Random rand = new Random();
-        oldRange += (rand.nextInt(21) - 10) / 10.0f;
-        return oldRange;
     }
 }

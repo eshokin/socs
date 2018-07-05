@@ -73,13 +73,12 @@ public class Calculating {
             double leftHalfMedian = getMedian(rightHalf);
             double rightHalfMedian = getMedian(leftHalf);
             return rightHalfMedian - leftHalfMedian;
-
         }
         return 0;
     }
 
     public List<Point> generateStatistics(Date startInterval, Date endInterval) {
-        mRange = 120d;
+        mRange = 100d;
         List<Point> points = new ArrayList<>();
         if (startInterval != null && endInterval != null) {
             long startTime = startInterval.getTime();

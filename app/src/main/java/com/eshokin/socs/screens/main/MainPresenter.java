@@ -12,7 +12,7 @@ import com.eshokin.socs.jobs.CalculateInterquartileRangeJob;
 import com.eshokin.socs.jobs.CalculateMedianJob;
 import com.eshokin.socs.jobs.CalculateMinMaxJob;
 import com.eshokin.socs.screens.base.BasePresenter;
-import com.eshokin.socs.utils.RxUtils;
+import com.eshokin.socs.utils.Rx;
 import com.path.android.jobqueue.JobManager;
 
 import java.util.Date;
@@ -38,6 +38,9 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     JobManager mJobManager;
 
+    @Inject
+    Rx mRx;
+
     public MainPresenter() {
         AppController.getComponent().inject(this);
     }
@@ -56,25 +59,27 @@ public class MainPresenter extends BasePresenter<MainView> {
 
         final Observable<GetStatisticsMethodResponse> observable = mApiService.getStatisticsMethod(request);
         Disposable disposable = observable
-                .compose(RxUtils.applySchedulers())
+                .compose(mRx.applySchedulers())
                 .subscribe(response -> {
                     getViewState().showLoading(false);
                     if (response != null && response.getStatus() != null && response.getStatus().isOk() && response.getResult().getPoints() != null) {
                         List<Point> points = response.getResult().getPoints();
                         if (points.size() > 0) {
+                            getViewState().showPoints(points);
                             calculateMinMax(points);
                             calculateAverage(points);
                             calculateMedian(points);
                             calculateInterquartileRange(points);
                         } else {
                             // empty list
+                            //getViewState().showDialog(R.string.  не удалось получить данный за указанный период);
                         }
                     } else {
-                        // server internal error
+                        //getViewState().showDialog(R.string.server_internal_error);
                     }
                 }, error -> {
                     getViewState().showLoading(false);
-                    // server not responding
+                    //  getViewState().showDialog(R.string.server_not_responding);
                 });
         unSubscribeOnDestroy(disposable);
     }
@@ -101,28 +106,28 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     private void initSubjects() {
         Disposable minMaxDisposable = mMinMaxSubject
-                .compose(RxUtils.applySchedulers())
+                .compose(mRx.applySchedulers())
                 .subscribe(minMax -> {
                     getViewState().showCalculatingMinMaxValue(false);
                     getViewState().showMinMaxValue(minMax.getMin(), minMax.getMax());
                 });
         unSubscribeOnDestroy(minMaxDisposable);
 
-        Disposable averageDisposable = mAverageSubject.compose(RxUtils.applySchedulers())
+        Disposable averageDisposable = mAverageSubject.compose(mRx.applySchedulers())
                 .subscribe(average -> {
                     getViewState().showCalculatingAverageValue(false);
                     getViewState().showAverageValue(average);
                 });
         unSubscribeOnDestroy(averageDisposable);
 
-        Disposable medianDisposable = mMedianSubject.compose(RxUtils.applySchedulers())
+        Disposable medianDisposable = mMedianSubject.compose(mRx.applySchedulers())
                 .subscribe(median -> {
                     getViewState().showCalculatingMedianValue(false);
                     getViewState().showMedianValue(median);
                 });
         unSubscribeOnDestroy(medianDisposable);
 
-        Disposable interquartileRangeDisposable = mInterquartileRangeSubject.compose(RxUtils.applySchedulers())
+        Disposable interquartileRangeDisposable = mInterquartileRangeSubject.compose(mRx.applySchedulers())
                 .subscribe(interquartileRange -> {
                     getViewState().showCalculatingInterquartileRangeValue(false);
                     getViewState().showInterquartileRangeValue(interquartileRange);
