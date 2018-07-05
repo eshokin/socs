@@ -8,7 +8,7 @@ import com.eshokin.socs.application.builder.modules.job.JobManagerModel;
 import com.eshokin.socs.jobs.CalculateAverageJob;
 import com.eshokin.socs.jobs.CalculateInterquartileRangeJob;
 import com.eshokin.socs.jobs.CalculateMedianJob;
-import com.eshokin.socs.jobs.SearchMinMaxJob;
+import com.eshokin.socs.jobs.CalculateMinMaxJob;
 import com.eshokin.socs.screens.main.MainActivity;
 import com.eshokin.socs.screens.main.MainPresenter;
 
@@ -24,7 +24,7 @@ public interface AppComponent {
 
     void inject(MockServerInterceptor interceptor);
 
-    void inject(SearchMinMaxJob job);
+    void inject(CalculateMinMaxJob job);
 
     void inject(CalculateAverageJob job);
 

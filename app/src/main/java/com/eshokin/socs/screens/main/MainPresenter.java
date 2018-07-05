@@ -6,7 +6,11 @@ import com.eshokin.socs.api.schemas.Point;
 import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
 import com.eshokin.socs.api.schemas.responses.GetStatisticsMethodResponse;
 import com.eshokin.socs.application.AppController;
-import com.eshokin.socs.calculating.Calculating;
+import com.eshokin.socs.calculating.Calculating.MinMax;
+import com.eshokin.socs.jobs.CalculateAverageJob;
+import com.eshokin.socs.jobs.CalculateInterquartileRangeJob;
+import com.eshokin.socs.jobs.CalculateMedianJob;
+import com.eshokin.socs.jobs.CalculateMinMaxJob;
 import com.eshokin.socs.screens.base.BasePresenter;
 import com.eshokin.socs.utils.RxUtils;
 import com.path.android.jobqueue.JobManager;
@@ -18,9 +22,15 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {
+
+    private PublishSubject<MinMax> mMinMaxSubject = PublishSubject.create();
+    private PublishSubject<Double> mAverageSubject = PublishSubject.create();
+    private PublishSubject<Double> mMedianSubject = PublishSubject.create();
+    private PublishSubject<Double> mInterquartileRangeSubject = PublishSubject.create();
 
     @Inject
     ApiService mApiService;
@@ -30,6 +40,12 @@ public class MainPresenter extends BasePresenter<MainView> {
 
     public MainPresenter() {
         AppController.getComponent().inject(this);
+    }
+
+    @Override
+    protected void onFirstViewAttach() {
+        super.onFirstViewAttach();
+        initSubjects();
     }
 
     public void getStatistics(Date startInterval, Date endInterval) {
@@ -46,7 +62,10 @@ public class MainPresenter extends BasePresenter<MainView> {
                     if (response != null && response.getStatus() != null && response.getStatus().isOk() && response.getResult().getPoints() != null) {
                         List<Point> points = response.getResult().getPoints();
                         if (points.size() > 0) {
-
+                            calculateMinMax(points);
+                            calculateAverage(points);
+                            calculateMedian(points);
+                            calculateInterquartileRange(points);
                         } else {
                             // empty list
                         }
@@ -58,5 +77,56 @@ public class MainPresenter extends BasePresenter<MainView> {
                     // server not responding
                 });
         unSubscribeOnDestroy(disposable);
+    }
+
+    private void calculateMinMax(List<Point> points) {
+        getViewState().showCalculatingMinMaxValue(true);
+        mJobManager.addJob(new CalculateMinMaxJob(points, mMinMaxSubject));
+    }
+
+    private void calculateAverage(List<Point> points) {
+        getViewState().showCalculatingAverageValue(true);
+        mJobManager.addJob(new CalculateAverageJob(points, mAverageSubject));
+    }
+
+    private void calculateMedian(List<Point> points) {
+        getViewState().showCalculatingMedianValue(true);
+        mJobManager.addJob(new CalculateMedianJob(points, mMedianSubject));
+    }
+
+    private void calculateInterquartileRange(List<Point> points) {
+        getViewState().showCalculatingInterquartileRangeValue(true);
+        mJobManager.addJob(new CalculateInterquartileRangeJob(points, mInterquartileRangeSubject));
+    }
+
+    private void initSubjects() {
+        Disposable minMaxDisposable = mMinMaxSubject
+                .compose(RxUtils.applySchedulers())
+                .subscribe(minMax -> {
+                    getViewState().showCalculatingMinMaxValue(false);
+                    getViewState().showMinMaxValue(minMax.getMin(), minMax.getMax());
+                });
+        unSubscribeOnDestroy(minMaxDisposable);
+
+        Disposable averageDisposable = mAverageSubject.compose(RxUtils.applySchedulers())
+                .subscribe(average -> {
+                    getViewState().showCalculatingAverageValue(false);
+                    getViewState().showAverageValue(average);
+                });
+        unSubscribeOnDestroy(averageDisposable);
+
+        Disposable medianDisposable = mMedianSubject.compose(RxUtils.applySchedulers())
+                .subscribe(median -> {
+                    getViewState().showCalculatingMedianValue(false);
+                    getViewState().showMedianValue(median);
+                });
+        unSubscribeOnDestroy(medianDisposable);
+
+        Disposable interquartileRangeDisposable = mInterquartileRangeSubject.compose(RxUtils.applySchedulers())
+                .subscribe(interquartileRange -> {
+                    getViewState().showCalculatingInterquartileRangeValue(false);
+                    getViewState().showInterquartileRangeValue(interquartileRange);
+                });
+        unSubscribeOnDestroy(interquartileRangeDisposable);
     }
 }

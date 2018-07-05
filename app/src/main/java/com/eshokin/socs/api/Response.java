@@ -1,8 +1,8 @@
-package com.eshokin.socs.api.schemas;
+package com.eshokin.socs.api;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ResponseSchema<T> {
+public class Response<T> {
 
     public static class Status {
 

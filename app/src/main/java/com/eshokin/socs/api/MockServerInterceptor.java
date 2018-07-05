@@ -3,7 +3,6 @@ package com.eshokin.socs.api;
 import android.support.annotation.NonNull;
 
 import com.eshokin.socs.api.schemas.Point;
-import com.eshokin.socs.api.schemas.ResponseSchema;
 import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
 import com.eshokin.socs.api.schemas.responses.GetStatisticsMethodResponse;
 import com.eshokin.socs.application.AppController;
@@ -19,7 +18,6 @@ import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 
@@ -36,12 +34,12 @@ public class MockServerInterceptor implements Interceptor {
     }
 
     @Override
-    public Response intercept(@NonNull Chain chain) throws IOException {
-        Response.Builder response = new Response.Builder();
+    public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+        okhttp3.Response.Builder response = new okhttp3.Response.Builder();
         response.request(chain.request()).code(200).protocol(Protocol.HTTP_1_0).addHeader("content-type", "application/json");
         GetStatisticsMethodResponse statisticsMethodResponse = new GetStatisticsMethodResponse();
         statisticsMethodResponse.setResult(new GetStatisticsMethodResponse.Result());
-        statisticsMethodResponse.setStatus(new ResponseSchema.Status());
+        statisticsMethodResponse.setStatus(new Response.Status());
         statisticsMethodResponse.getStatus().setError("internal_error");
         statisticsMethodResponse.getStatus().setMessage("Internal error");
 

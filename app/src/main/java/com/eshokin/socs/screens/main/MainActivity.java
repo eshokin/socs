@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
@@ -129,6 +130,52 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     public void showLoading(boolean show) {
         mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
+
+    @Override
+    public void hideDialog() {
+
+    }
+
+    @Override
+    public void showMinMaxValue(Double min, Double max) {
+
+    }
+
+    @Override
+    public void showCalculatingMinMaxValue(boolean show) {
+
+    }
+
+    @Override
+    public void showAverageValue(Double average) {
+
+    }
+
+    @Override
+    public void showCalculatingAverageValue(boolean show) {
+
+    }
+
+    @Override
+    public void showMedianValue(Double median) {
+
+    }
+
+    @Override
+    public void showCalculatingMedianValue(boolean show) {
+
+    }
+
+    @Override
+    public void showInterquartileRangeValue(Double interquartileRange) {
+
+    }
+
+    @Override
+    public void showCalculatingInterquartileRangeValue(boolean show) {
+
+    }
+
 
     private void setData(int count, float range) {
 
