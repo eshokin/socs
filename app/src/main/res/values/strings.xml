@@ -2,5 +2,17 @@
     <string name="app_name">Data generation and calculation of statistics</string>
 
     <string name="activity_main_load_button">Load</string>
+    <string name="activity_main_select_time">Select time</string>
+    <string name="activity_main_start_interval_error">The starting interval should be less than the final interval</string>
+    <string name="activity_main_end_interval_error">The end interval must be greater than the initial interval</string>
+    <string name="activity_main_attention">Attention</string>
+    <string name="activity_main_button_ok">OK</string>
+    <string name="activity_main_required_field">* Required field</string>
+
+    <string name="could_not_retrieve_data">Could not retrieve data for the specified period.</string>
+
+    <string name="server_internal_error">Server internal error.</string>
+    <string name="server_not_responding">Server is not responding.</string>
+
 
 </resources>

@@ -1,9 +1,14 @@
 package com.eshokin.socs.screens.main;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -12,30 +17,19 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.eshokin.socs.R;
 import com.eshokin.socs.api.schemas.Point;
 import com.eshokin.socs.application.AppController;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
+
+    private static final String FORMAT_DD_MM_YYYY_HH_MM = "dd.MM.yyyy, HH:mm";
 
     @InjectPresenter
     MainPresenter mMainPresenter;
@@ -43,25 +37,54 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @BindView(R.id.activity_main_progress_bar)
     ProgressBar mProgressBar;
 
-    @BindView(R.id.activity_main_chart)
-    LineChart mChart;
-
     @BindView(R.id.activity_main_min_value)
     TextView mMin;
+
+    @BindView(R.id.activity_main_min_waiting)
+    ProgressBar mMinWaiting;
 
     @BindView(R.id.activity_main_max_value)
     TextView mMax;
 
+    @BindView(R.id.activity_main_max_waiting)
+    ProgressBar mMaxWaiting;
+
     @BindView(R.id.activity_main_average_value)
     TextView mAverage;
+
+    @BindView(R.id.activity_main_average_waiting)
+    ProgressBar mAverageWaiting;
 
     @BindView(R.id.activity_main_median_value)
     TextView mMedian;
 
+    @BindView(R.id.activity_main_median_waiting)
+    ProgressBar mMedianWaiting;
+
     @BindView(R.id.activity_main_interquartile_range_value)
     TextView mInterquartileRange;
 
-    private AlertDialog mDialog;
+    @BindView(R.id.activity_main_interquartile_range_waiting)
+    ProgressBar mInterquartileRangeWaiting;
+
+    @BindView(R.id.activity_main_start_interval)
+    EditText mStartInterval;
+
+    @BindView(R.id.activity_main_end_interval)
+    EditText mEndInterval;
+
+    @BindView(R.id.activity_main_load_button)
+    Button mLoadButton;
+
+    private AlertDialog mAlertDialog;
+    private DatePickerDialog mStartPickerDialog;
+    private DatePickerDialog mEndPickerDialog;
+
+    private TimePickerDialog mStartTimePicker;
+    private TimePickerDialog mEndTimePicker;
+
+    private SimpleDateFormat mDateFormat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,96 +94,54 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         ButterKnife.bind(this);
         AppController.getComponent().inject(this);
 
+        mDateFormat = new SimpleDateFormat(FORMAT_DD_MM_YYYY_HH_MM, getLocale());
 
-        mChart.getDescription().setEnabled(false);
-
-        // enable touch gestures
-        mChart.setTouchEnabled(true);
-
-        mChart.setDragDecelerationFrictionCoef(0.9f);
-
-        // enable scaling and dragging
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
-        mChart.setDrawGridBackground(false);
-        mChart.setHighlightPerDragEnabled(true);
-
-        // set an alternative background color
-        mChart.setBackgroundColor(Color.WHITE);
-        mChart.setViewPortOffsets(0f, 0f, 0f, 0f);
-
-        //mChart.invalidate();
-
-        // add data
-
-
-        setData(100, 30);
-        mChart.invalidate();
-
-        // get the legend (only possible after setting data)
-        Legend l = mChart.getLegend();
-        l.setEnabled(false);
-
-        XAxis xAxis = mChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.TOP_INSIDE);
-        // xAxis.setTypeface(mTfLight);
-        xAxis.setTextSize(10f);
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setDrawAxisLine(false);
-        xAxis.setDrawGridLines(true);
-        xAxis.setTextColor(Color.rgb(255, 192, 56));
-        xAxis.setCenterAxisLabels(true);
-        xAxis.setGranularity(1f); // one hour
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
-            private SimpleDateFormat mFormat = new SimpleDateFormat("dd MMM HH:mm");
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                long millis = TimeUnit.HOURS.toMillis((long) value);
-                return mFormat.format(new Date(millis));
-            }
+        mStartInterval.setOnClickListener(view -> {
+            mMainPresenter.showStartDateIntervalDialog();
         });
 
-        YAxis leftAxis = mChart.getAxisLeft();
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.INSIDE_CHART);
-        leftAxis.setTextColor(ColorTemplate.getHoloBlue());
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setGranularityEnabled(true);
-        leftAxis.setAxisMinimum(0f);
-        leftAxis.setAxisMaximum(170f);
-        leftAxis.setYOffset(-9f);
-        leftAxis.setTextColor(Color.rgb(255, 192, 56));
+        mEndInterval.setOnClickListener(view -> {
+            mMainPresenter.showEndIntervalDialog();
+        });
 
-        YAxis rightAxis = mChart.getAxisRight();
-        rightAxis.setEnabled(false);
-    }
-
-    @OnClick({R.id.activity_main_load_button})
-    public void getStatistics() {
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -5);
-
-        mMainPresenter.getStatistics(calendar.getTime(), new Date());
-
-        //setData(100, 30);
+        mLoadButton.setOnClickListener(view -> {
+            mMainPresenter.loadStatistics();
+        });
     }
 
     @Override
     public void showLoading(boolean show) {
         mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mStartInterval.setEnabled(!show);
+        mEndInterval.setEnabled(!show);
+        mLoadButton.setEnabled(!show);
     }
 
     @Override
-    public void hideDialog() {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
+    public void showAlertDialog(int message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle(R.string.activity_main_attention)
+                .setMessage(message)
+                .setCancelable(false)
+                .setNegativeButton(R.string.activity_main_button_ok,
+                        (dialog, id) -> {
+                            mMainPresenter.hideAlertDialog();
+                            dialog.cancel();
+                        });
+        mAlertDialog = builder.create();
+        mAlertDialog.show();
+    }
+
+    @Override
+    public void hideAlertDialog() {
+        if (mAlertDialog != null && mAlertDialog.isShowing()) {
+            mAlertDialog.dismiss();
         }
     }
 
     @Override
     public void showPoints(List<Point> points) {
-
+        // paint plot
     }
 
     @Override
@@ -171,7 +152,8 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showCalculatingMinMaxValue(boolean show) {
-
+        mMinWaiting.setVisibility(show ? View.VISIBLE : View.GONE);
+        mMaxWaiting.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -181,7 +163,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showCalculatingAverageValue(boolean show) {
-
+        mAverageWaiting.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -191,7 +173,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showCalculatingMedianValue(boolean show) {
-
+        mMedianWaiting.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -201,53 +183,139 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     @Override
     public void showCalculatingInterquartileRangeValue(boolean show) {
-
+        mInterquartileRangeWaiting.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-
-    private void setData(int count, float range) {
-
-        // now in hours
-        long now = TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis());
-
-        ArrayList<Entry> values = new ArrayList<>();
-
-        float from = now;
-
-        // count = hours
-        float to = now + count;
-
-        // increment by 1 hour
-
-
-        for (float x = from; x < to; x++) {
-            Random random = new Random();
-            random.nextFloat();
-
-            float y = random.nextFloat(); //getRandom(range, 50);
-           // values.add(new Entry(x, getRate())); // add one entry per hour
+    @Override
+    public void hideDateDialog() {
+        if (mStartPickerDialog != null && mStartPickerDialog.isShowing()) {
+            mStartPickerDialog.dismiss();
         }
 
-        // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(values, "DataSet 1");
-        set1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        set1.setColor(ColorTemplate.getHoloBlue());
-        set1.setValueTextColor(ColorTemplate.getHoloBlue());
-        set1.setLineWidth(1.5f);
-        set1.setDrawCircles(false);
-        set1.setDrawValues(false);
-        set1.setFillAlpha(65);
-        set1.setFillColor(ColorTemplate.getHoloBlue());
-        set1.setHighLightColor(Color.rgb(244, 117, 117));
-        set1.setDrawCircleHole(false);
+        if (mEndPickerDialog != null && mEndPickerDialog.isShowing()) {
+            mEndPickerDialog.dismiss();
+        }
+    }
 
-        // create a data object with the datasets
-        LineData data = new LineData(set1);
-        data.setValueTextColor(Color.WHITE);
-        data.setValueTextSize(9f);
+    @Override
+    public void hideTimeDialog() {
+        if (mStartTimePicker != null && mStartTimePicker.isShowing()) {
+            mStartTimePicker.dismiss();
+        }
 
-        // set data
-        mChart.setData(data);
-        mChart.invalidate();
+        if (mEndTimePicker != null && mEndTimePicker.isShowing()) {
+            mEndTimePicker.dismiss();
+        }
+    }
+
+    @Override
+    public void setStartInterval(Date startInterval) {
+        mStartInterval.setText(dateToString(startInterval));
+    }
+
+    @Override
+    public void setEndInterval(Date endInterval) {
+        mEndInterval.setText(dateToString(endInterval));
+    }
+
+    @Override
+    public void emptyStartInterval() {
+        mStartInterval.setError(getString(R.string.activity_main_required_field));
+        mStartInterval.requestFocus();
+    }
+
+    @Override
+    public void emptyEndInterval() {
+        mEndInterval.setError(getString(R.string.activity_main_required_field));
+        mEndInterval.requestFocus();
+    }
+
+    @Override
+    public void showStartIntervalDateDialog(Date startInterval) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startInterval);
+
+        mStartPickerDialog = new DatePickerDialog(this, (view, year1, monthOfYear, dayOfMonth) -> {
+            calendar.set(year1, monthOfYear, dayOfMonth);
+            mMainPresenter.hideDateDialog();
+            mMainPresenter.showStartTimeIntervalDialog(calendar.getTime());
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        mStartPickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+
+        mStartPickerDialog.setOnCancelListener(dialog -> {
+            mMainPresenter.hideDateDialog();
+        });
+        mStartPickerDialog.show();
+    }
+
+    @Override
+    public void showStartTimeIntervalDialog(Date startInterval) {
+        final Calendar calender = Calendar.getInstance();
+        calender.setTime(startInterval);
+        mStartTimePicker = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+            calender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calender.set(Calendar.MINUTE, minute);
+            mMainPresenter.setStartIntervalDate(calender.getTime());
+            mMainPresenter.hideTimeDialog();
+        }, calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE), true);
+        mStartTimePicker.setTitle(R.string.activity_main_select_time);
+        mStartTimePicker.show();
+    }
+
+    @Override
+    public void showEndIntervalDateDialog(Date endInterval) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endInterval);
+
+        mEndPickerDialog = new DatePickerDialog(this, (view, year1, monthOfYear, dayOfMonth) -> {
+            calendar.set(year1, monthOfYear, dayOfMonth);
+            mMainPresenter.hideDateDialog();
+            mMainPresenter.showEndTimeIntervalDialog(calendar.getTime());
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        mEndPickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+
+        mEndPickerDialog.setOnCancelListener(dialog -> {
+            mMainPresenter.hideDateDialog();
+        });
+        mEndPickerDialog.show();
+    }
+
+    @Override
+    public void showEndTimeIntervalDialog(Date endInterval) {
+        final Calendar calender = Calendar.getInstance();
+        calender.setTime(endInterval);
+        mEndTimePicker = new TimePickerDialog(this, (view, hourOfDay, minute) -> {
+            calender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            calender.set(Calendar.MINUTE, minute);
+            mMainPresenter.setEndIntervalDate(calender.getTime());
+            mMainPresenter.hideTimeDialog();
+        }, calender.get(Calendar.HOUR_OF_DAY), calender.get(Calendar.MINUTE), true);
+        mEndTimePicker.setTitle(R.string.activity_main_select_time);
+        mEndTimePicker.show();
+    }
+
+    private Locale getLocale() {
+        Resources resources = this.getResources();
+        if (resources != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                return resources.getConfiguration().getLocales().get(0);
+            } else {
+                return resources.getConfiguration().locale;
+            }
+        }
+        return Locale.US;
+    }
+
+    private String dateToString(Date date) {
+        if (date != null) {
+            try {
+                return mDateFormat.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 }

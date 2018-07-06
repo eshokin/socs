@@ -5,6 +5,7 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.eshokin.socs.api.schemas.Point;
 
+import java.util.Date;
 import java.util.List;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
@@ -12,9 +13,9 @@ public interface MainView extends MvpView {
 
     void showLoading(boolean show);
 
-    void showDialog(int message);
+    void showAlertDialog(int message);
 
-    void hideDialog();
+    void hideAlertDialog();
 
     void showPoints(List<Point> points);
 
@@ -33,4 +34,24 @@ public interface MainView extends MvpView {
     void showInterquartileRangeValue(Double interquartileRange);
 
     void showCalculatingInterquartileRangeValue(boolean show);
+
+    void showStartIntervalDateDialog(Date startInterval);
+
+    void showStartTimeIntervalDialog(Date startInterval);
+
+    void showEndIntervalDateDialog(Date endInterval);
+
+    void showEndTimeIntervalDialog(Date endInterval);
+
+    void hideDateDialog();
+
+    void hideTimeDialog();
+
+    void setStartInterval(Date startInterval);
+
+    void setEndInterval(Date endInterval);
+
+    void emptyStartInterval();
+
+    void emptyEndInterval();
 }

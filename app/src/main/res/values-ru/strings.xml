@@ -3,4 +3,15 @@
     <string name="app_name">Симуляция и расчет статистики</string>
 
     <string name="activity_main_load_button">Загрузить</string>
+    <string name="activity_main_select_time">Выберите время</string>
+    <string name="activity_main_start_interval_error">Начальный интервал должен быть меньше конечного</string>
+    <string name="activity_main_end_interval_error">Конечный интервал должен быть больше начального</string>
+    <string name="activity_main_attention">Внимание</string>
+    <string name="activity_main_button_ok">ОК</string>
+    <string name="activity_main_required_field">* Обязательное для заполнения</string>
+
+    <string name="could_not_retrieve_data">Не удалось получить данные за указанный период.</string>
+
+    <string name="server_internal_error">Внутренняя ошибка сервера.</string>
+    <string name="server_not_responding">Сервер не отвечает.</string>
 </resources>

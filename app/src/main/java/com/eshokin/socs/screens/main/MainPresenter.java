@@ -1,6 +1,7 @@
 package com.eshokin.socs.screens.main;
 
 import com.arellomobile.mvp.InjectViewState;
+import com.eshokin.socs.R;
 import com.eshokin.socs.api.ApiService;
 import com.eshokin.socs.api.schemas.Point;
 import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
@@ -15,6 +16,7 @@ import com.eshokin.socs.screens.base.BasePresenter;
 import com.eshokin.socs.utils.Rx;
 import com.path.android.jobqueue.JobManager;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +29,8 @@ import io.reactivex.subjects.PublishSubject;
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {
 
+    private Date mStartIntervalDate;
+    private Date mEndIntervalDate;
     private PublishSubject<MinMax> mMinMaxSubject = PublishSubject.create();
     private PublishSubject<Double> mAverageSubject = PublishSubject.create();
     private PublishSubject<Double> mMedianSubject = PublishSubject.create();
@@ -51,11 +55,92 @@ public class MainPresenter extends BasePresenter<MainView> {
         initSubjects();
     }
 
-    public void getStatistics(Date startInterval, Date endInterval) {
+    public void hideAlertDialog() {
+        getViewState().hideAlertDialog();
+    }
+
+    public void hideDateDialog() {
+        getViewState().hideDateDialog();
+    }
+
+    public void hideTimeDialog() {
+        getViewState().hideTimeDialog();
+    }
+
+    public void setStartIntervalDate(Date startIntervalDate) {
+        if (startIntervalDate != null) {
+            if (mEndIntervalDate != null) {
+                if (startIntervalDate.getTime() < mEndIntervalDate.getTime()) {
+                    mStartIntervalDate = startIntervalDate;
+                } else {
+                    getViewState().showAlertDialog(R.string.activity_main_start_interval_error);
+                }
+            } else {
+                mStartIntervalDate = startIntervalDate;
+            }
+            getViewState().setStartInterval(mStartIntervalDate);
+        }
+    }
+
+    public void setEndIntervalDate(Date endIntervalDate) {
+        if (endIntervalDate != null) {
+            if (mStartIntervalDate != null) {
+                if (endIntervalDate.getTime() > mStartIntervalDate.getTime()) {
+                    mEndIntervalDate = endIntervalDate;
+                } else {
+                    getViewState().showAlertDialog(R.string.activity_main_end_interval_error);
+                }
+            } else {
+                mEndIntervalDate = endIntervalDate;
+            }
+            getViewState().setEndInterval(mEndIntervalDate);
+        }
+    }
+
+    public void showStartDateIntervalDialog() {
+        Calendar calendar = Calendar.getInstance();
+        if (mStartIntervalDate != null) {
+            calendar.setTime(mStartIntervalDate);
+        }
+        getViewState().showStartIntervalDateDialog(calendar.getTime());
+    }
+
+    public void showStartTimeIntervalDialog(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        getViewState().showStartTimeIntervalDialog(calendar.getTime());
+    }
+
+    public void showEndTimeIntervalDialog(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        getViewState().showEndTimeIntervalDialog(calendar.getTime());
+    }
+
+    public void showEndIntervalDialog() {
+        Calendar calendar = Calendar.getInstance();
+        if (mEndIntervalDate != null) {
+            calendar.setTime(mEndIntervalDate);
+        }
+        getViewState().showEndIntervalDateDialog(calendar.getTime());
+    }
+
+    public void loadStatistics() {
+
+        if (mStartIntervalDate == null) {
+            getViewState().emptyStartInterval();
+            return;
+        }
+
+        if (mEndIntervalDate == null) {
+            getViewState().emptyEndInterval();
+            return;
+        }
+
         getViewState().showLoading(true);
         GetStatisticsMethodRequest request = new GetStatisticsMethodRequest();
-        request.setStartInterval(startInterval);
-        request.setEndInterval(endInterval);
+        request.setStartInterval(mStartIntervalDate);
+        request.setEndInterval(mEndIntervalDate);
 
         final Observable<GetStatisticsMethodResponse> observable = mApiService.getStatisticsMethod(request);
         Disposable disposable = observable
@@ -71,15 +156,14 @@ public class MainPresenter extends BasePresenter<MainView> {
                             calculateMedian(points);
                             calculateInterquartileRange(points);
                         } else {
-                            // empty list
-                            //getViewState().showDialog(R.string.  не удалось получить данный за указанный период);
+                            getViewState().showAlertDialog(R.string.could_not_retrieve_data);
                         }
                     } else {
-                        //getViewState().showDialog(R.string.server_internal_error);
+                        getViewState().showAlertDialog(R.string.server_internal_error);
                     }
                 }, error -> {
                     getViewState().showLoading(false);
-                    //  getViewState().showDialog(R.string.server_not_responding);
+                    getViewState().showAlertDialog(R.string.server_not_responding);
                 });
         unSubscribeOnDestroy(disposable);
     }
