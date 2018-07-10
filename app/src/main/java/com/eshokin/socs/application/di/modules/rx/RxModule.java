@@ -1,6 +1,6 @@
-package com.eshokin.socs.application.builder.modules.rx;
+package com.eshokin.socs.application.di.modules.rx;
 
-import com.eshokin.socs.application.builder.AppScope;
+import com.eshokin.socs.application.di.AppScope;
 import com.eshokin.socs.utils.Rx;
 
 import dagger.Module;

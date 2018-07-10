@@ -1,7 +1,7 @@
-package com.eshokin.socs.application.builder.modules.api;
+package com.eshokin.socs.application.di.modules.api;
 
-import com.eshokin.socs.application.builder.AppScope;
-import com.eshokin.socs.application.builder.modules.network.RetrofitModule;
+import com.eshokin.socs.application.di.AppScope;
+import com.eshokin.socs.application.di.modules.network.RetrofitModule;
 import com.eshokin.socs.api.Api;
 
 import dagger.Module;

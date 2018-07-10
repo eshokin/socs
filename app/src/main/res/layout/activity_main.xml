@@ -19,183 +19,11 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/activity_main_chart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
+                android:layout_height="150dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
             </com.github.mikephil.charting.charts.LineChart>
-
-            <TextView
-                android:id="@+id/activity_main_min_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MIN:"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/activity_main_min_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_min_title"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ProgressBar
-                android:id="@+id/activity_main_min_waiting"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_min_title"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/activity_main_max_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="MAX:"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_min_title" />
-
-            <TextView
-                android:id="@+id/activity_main_max_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_max_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_min_value" />
-
-            <ProgressBar
-                android:id="@+id/activity_main_max_waiting"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_max_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_min_waiting" />
-
-            <TextView
-                android:id="@+id/activity_main_average_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="AVERAGE:"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_max_title" />
-
-            <TextView
-                android:id="@+id/activity_main_average_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_average_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_max_value" />
-
-            <ProgressBar
-                android:id="@+id/activity_main_average_waiting"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_average_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_max_waiting" />
-
-            <TextView
-                android:id="@+id/activity_main_median_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="MEDIAN:"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_average_title" />
-
-            <TextView
-                android:id="@+id/activity_main_median_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_median_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_average_value" />
-
-            <ProgressBar
-                android:id="@+id/activity_main_median_waiting"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_median_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_average_waiting" />
-
-            <TextView
-                android:id="@+id/activity_main_interquartile_range_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="INTERQUARTILE RANGE:"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_median_title" />
-
-            <TextView
-                android:id="@+id/activity_main_interquartile_range_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_interquartile_range_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_median_value" />
-
-            <ProgressBar
-                android:id="@+id/activity_main_interquartile_range_waiting"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/activity_main_interquartile_range_title"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_median_waiting" />
-
 
             <android.support.constraint.Guideline
                 android:id="@+id/vertical_guideline_50"
@@ -204,31 +32,257 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent=".50" />
 
-
-            <EditText
-                android:id="@+id/activity_main_start_interval"
+            <View
+                android:id="@+id/activity_main_divider"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Start interval"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_interquartile_range_title" />
-
-            <EditText
-                android:id="@+id/activity_main_end_interval"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="End interval"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/activity_main_start_interval" />
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_chart" />
+
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/activity_main_min_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_50"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_divider">
+
+                <TextView
+                    android:id="@+id/activity_main_min_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_min_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/activity_main_min_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_min_title" />
+
+                <ProgressBar
+                    android:id="@+id/activity_main_min_waiting"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_min_title" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/activity_main_max_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/vertical_guideline_50"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_divider">
+
+                <TextView
+                    android:id="@+id/activity_main_max_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_max_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/activity_main_max_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_max_title" />
+
+                <ProgressBar
+                    android:id="@+id/activity_main_max_waiting"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_max_title" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/activity_main_average_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/vertical_guideline_50"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_min_container">
+
+                <TextView
+                    android:id="@+id/activity_main_average_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_average_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/activity_main_average_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_average_title" />
+
+                <ProgressBar
+                    android:id="@+id/activity_main_average_waiting"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_average_title" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/activity_main_median_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/vertical_guideline_50"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_max_container">
+
+                <TextView
+                    android:id="@+id/activity_main_median_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_median_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/activity_main_median_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_median_title" />
+
+                <ProgressBar
+                    android:id="@+id/activity_main_median_waiting"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_median_title" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/activity_main_interquartile_range_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_average_container">
+
+                <TextView
+                    android:id="@+id/activity_main_interquartile_range_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_main_interquartile_range_title"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/activity_main_interquartile_range_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_interquartile_range_title" />
+
+                <ProgressBar
+                    android:id="@+id/activity_main_interquartile_range_waiting"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/activity_main_interquartile_range_title" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <View
+                android:id="@+id/activity_main_divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_interquartile_range_container" />
+
+            <EditText
+                android:id="@+id/activity_main_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/activity_main_start_interval_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_divider2" />
+
+            <EditText
+                android:id="@+id/activity_main_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/activity_main_end_interval_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_start_date" />
+
+            <Spinner
+                android:id="@+id/activity_main_chose_interval"
+                style="@style/Widget.AppCompat.Spinner.Underlined"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="17sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_end_date" />
 
             <Button
                 android:id="@+id/activity_main_load_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:text="@string/activity_main_load_button"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_main_chose_interval" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>

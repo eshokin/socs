@@ -1,32 +1,43 @@
 package com.eshokin.socs.api.schemas.requests;
 
+import com.eshokin.socs.api.enumerations.Interval;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 
 public class GetStatisticsMethodRequest {
 
-    @SerializedName("startInterval")
-    private Date startInterval;
+    @SerializedName("startDate")
+    private Date startDate;
 
-    @SerializedName("endInterval")
+    @SerializedName("endDate")
+    private Date endDate;
 
-    private Date endInterval;
+    @SerializedName("interval")
+    private Interval interval;
 
-    public Date getStartInterval() {
-        return startInterval;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public Date getEndInterval() {
-        return endInterval;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void setStartInterval(Date startInterval) {
-        this.startInterval = startInterval;
+    public Interval getInterval() {
+        return interval;
     }
 
-    public void setEndInterval(Date endInterval) {
-        this.endInterval = endInterval;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setInterval(Interval interval) {
+        this.interval = interval;
     }
 }
 

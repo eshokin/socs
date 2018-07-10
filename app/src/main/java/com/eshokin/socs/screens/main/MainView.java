@@ -2,6 +2,7 @@ package com.eshokin.socs.screens.main;
 
 import com.arellomobile.mvp.MvpView;
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy;
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy;
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType;
 import com.eshokin.socs.api.schemas.Point;
 
@@ -35,23 +36,23 @@ public interface MainView extends MvpView {
 
     void showCalculatingInterquartileRangeValue(boolean show);
 
-    void showStartIntervalDateDialog(Date startInterval);
+    void showStartDateDialog(Date startDate);
 
-    void showStartTimeIntervalDialog(Date startInterval);
+    void showStartTimeDialog(Date startTime);
 
-    void showEndIntervalDateDialog(Date endInterval);
+    void showEndDateDialog(Date endDate);
 
-    void showEndTimeIntervalDialog(Date endInterval);
+    void showEndTimeDialog(Date endTime);
 
     void hideDateDialog();
 
     void hideTimeDialog();
 
-    void setStartInterval(Date startInterval);
+    void setStartDate(Date startDate);
 
-    void setEndInterval(Date endInterval);
+    void setEndDate(Date endDate);
 
-    void emptyStartInterval();
+    void emptyStartDate();
 
-    void emptyEndInterval();
+    void emptyEndDate();
 }

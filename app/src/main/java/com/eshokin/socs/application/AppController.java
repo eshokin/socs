@@ -1,12 +1,12 @@
 package com.eshokin.socs.application;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
-import com.eshokin.socs.application.builder.AppComponent;
-import com.eshokin.socs.application.builder.DaggerAppComponent;
-import com.eshokin.socs.application.builder.modules.context.ContextModule;
+import com.eshokin.socs.application.di.AppComponent;
+import com.eshokin.socs.application.di.DaggerAppComponent;
+import com.eshokin.socs.application.di.modules.context.ContextModule;
 
-public class AppController extends Application {
+public class AppController extends MultiDexApplication {
 
     private static AppComponent component;
 

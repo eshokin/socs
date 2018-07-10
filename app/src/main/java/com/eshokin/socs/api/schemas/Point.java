@@ -11,7 +11,7 @@ public class Point {
     private Date date;
 
     @SerializedName("rate")
-    private double rate;
+    private Double rate;
 
     public Date getDate() {
         return date;
@@ -21,11 +21,11 @@ public class Point {
         this.date = date;
     }
 
-    public double getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(double rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 }

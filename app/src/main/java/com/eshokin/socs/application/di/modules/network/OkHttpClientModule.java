@@ -1,9 +1,9 @@
-package com.eshokin.socs.application.builder.modules.network;
+package com.eshokin.socs.application.di.modules.network;
 
 import android.util.Log;
 
 import com.eshokin.socs.api.MockServerInterceptor;
-import com.eshokin.socs.application.builder.AppScope;
+import com.eshokin.socs.application.di.AppScope;
 
 import dagger.Module;
 import dagger.Provides;

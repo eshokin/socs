@@ -1,9 +1,9 @@
-package com.eshokin.socs.application.builder.modules.job;
+package com.eshokin.socs.application.di.modules.job;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.eshokin.socs.application.builder.AppScope;
+import com.eshokin.socs.application.di.AppScope;
 import com.path.android.jobqueue.JobManager;
 import com.path.android.jobqueue.config.Configuration;
 import com.path.android.jobqueue.log.CustomLogger;

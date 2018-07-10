@@ -1,4 +1,4 @@
-package com.eshokin.socs.application.builder;
+package com.eshokin.socs.screens.main.di;
 
 import java.lang.annotation.Retention;
 
@@ -8,5 +8,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Scope
 @Retention(RUNTIME)
-public @interface AppScope {
+public @interface MainScope {
 }

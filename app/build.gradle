@@ -10,7 +10,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -28,7 +28,7 @@ android {
     productFlavors {
         qa {
             applicationId "com.eshokin.socs"
-            buildConfigField 'String', 'HOST', '"http://sushimarket-api-public.q-s.pw"'
+            buildConfigField 'String', 'HOST', '"http://localhost:8082"'
         }
     }
 }

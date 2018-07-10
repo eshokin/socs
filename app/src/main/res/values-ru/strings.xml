@@ -4,11 +4,26 @@
 
     <string name="activity_main_load_button">Загрузить</string>
     <string name="activity_main_select_time">Выберите время</string>
-    <string name="activity_main_start_interval_error">Начальный интервал должен быть меньше конечного</string>
-    <string name="activity_main_end_interval_error">Конечный интервал должен быть больше начального</string>
+    <string name="activity_main_start_date_error">Начальная дата должна быть меньше конечной даты</string>
+    <string name="activity_main_end_date_error">Конечная дата должна быть больше начальной даты</string>
     <string name="activity_main_attention">Внимание</string>
     <string name="activity_main_button_ok">ОК</string>
     <string name="activity_main_required_field">* Обязательное для заполнения</string>
+    <string name="activity_main_min_title">Мин:</string>
+    <string name="activity_main_max_title">Мах:</string>
+    <string name="activity_main_average_title">Среднее:</string>
+    <string name="activity_main_median_title">Медиана:</string>
+    <string name="activity_main_interquartile_range_title">Интерквартильный размах:</string>
+    <string name="activity_main_m1">1 минута</string>
+    <string name="activity_main_m5">5 минут</string>
+    <string name="activity_main_m15">15 минут</string>
+    <string name="activity_main_m30">30 минут</string>
+    <string name="activity_main_h1">1 час</string>
+    <string name="activity_main_h4">4 часа</string>
+    <string name="activity_main_h12">12 часов</string>
+    <string name="activity_main_d1">1 день</string>
+    <string name="activity_main_start_interval_title">Начало интервала</string>
+    <string name="activity_main_end_interval_title">Конец интервала</string>
 
     <string name="could_not_retrieve_data">Не удалось получить данные за указанный период.</string>
 

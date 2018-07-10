@@ -3,16 +3,17 @@ package com.eshokin.socs.screens.main;
 import com.arellomobile.mvp.InjectViewState;
 import com.eshokin.socs.R;
 import com.eshokin.socs.api.ApiService;
+import com.eshokin.socs.api.enumerations.Interval;
 import com.eshokin.socs.api.schemas.Point;
 import com.eshokin.socs.api.schemas.requests.GetStatisticsMethodRequest;
 import com.eshokin.socs.api.schemas.responses.GetStatisticsMethodResponse;
-import com.eshokin.socs.application.AppController;
 import com.eshokin.socs.calculating.Calculating.MinMax;
 import com.eshokin.socs.jobs.CalculateAverageJob;
 import com.eshokin.socs.jobs.CalculateInterquartileRangeJob;
 import com.eshokin.socs.jobs.CalculateMedianJob;
 import com.eshokin.socs.jobs.CalculateMinMaxJob;
 import com.eshokin.socs.screens.base.BasePresenter;
+import com.eshokin.socs.screens.main.di.MainComponent;
 import com.eshokin.socs.utils.Rx;
 import com.path.android.jobqueue.JobManager;
 
@@ -29,8 +30,8 @@ import io.reactivex.subjects.PublishSubject;
 @InjectViewState
 public class MainPresenter extends BasePresenter<MainView> {
 
-    private Date mStartIntervalDate;
-    private Date mEndIntervalDate;
+    private Date mStartDate;
+    private Date mEndDate;
     private PublishSubject<MinMax> mMinMaxSubject = PublishSubject.create();
     private PublishSubject<Double> mAverageSubject = PublishSubject.create();
     private PublishSubject<Double> mMedianSubject = PublishSubject.create();
@@ -45,8 +46,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     @Inject
     Rx mRx;
 
-    public MainPresenter() {
-        AppController.getComponent().inject(this);
+    public void ingest(MainComponent component) {
+        component.inject(this);
     }
 
     @Override
@@ -67,80 +68,81 @@ public class MainPresenter extends BasePresenter<MainView> {
         getViewState().hideTimeDialog();
     }
 
-    public void setStartIntervalDate(Date startIntervalDate) {
-        if (startIntervalDate != null) {
-            if (mEndIntervalDate != null) {
-                if (startIntervalDate.getTime() < mEndIntervalDate.getTime()) {
-                    mStartIntervalDate = startIntervalDate;
+    public void setStartDate(Date startDate) {
+        if (startDate != null) {
+            if (mEndDate != null) {
+                if (startDate.getTime() < mEndDate.getTime()) {
+                    mStartDate = startDate;
                 } else {
-                    getViewState().showAlertDialog(R.string.activity_main_start_interval_error);
+                    getViewState().showAlertDialog(R.string.activity_main_start_date_error);
                 }
             } else {
-                mStartIntervalDate = startIntervalDate;
+                mStartDate = startDate;
             }
-            getViewState().setStartInterval(mStartIntervalDate);
+            getViewState().setStartDate(mStartDate);
         }
     }
 
-    public void setEndIntervalDate(Date endIntervalDate) {
-        if (endIntervalDate != null) {
-            if (mStartIntervalDate != null) {
-                if (endIntervalDate.getTime() > mStartIntervalDate.getTime()) {
-                    mEndIntervalDate = endIntervalDate;
+    public void setEndDate(Date endDate) {
+        if (endDate != null) {
+            if (mStartDate != null) {
+                if (endDate.getTime() > mStartDate.getTime()) {
+                    mEndDate = endDate;
                 } else {
-                    getViewState().showAlertDialog(R.string.activity_main_end_interval_error);
+                    getViewState().showAlertDialog(R.string.activity_main_end_date_error);
                 }
             } else {
-                mEndIntervalDate = endIntervalDate;
+                mEndDate = endDate;
             }
-            getViewState().setEndInterval(mEndIntervalDate);
+            getViewState().setEndDate(mEndDate);
         }
     }
 
-    public void showStartDateIntervalDialog() {
+    public void showStartDateDialog() {
         Calendar calendar = Calendar.getInstance();
-        if (mStartIntervalDate != null) {
-            calendar.setTime(mStartIntervalDate);
+        if (mStartDate != null) {
+            calendar.setTime(mStartDate);
         }
-        getViewState().showStartIntervalDateDialog(calendar.getTime());
+        getViewState().showStartDateDialog(calendar.getTime());
     }
 
-    public void showStartTimeIntervalDialog(Date date) {
+    public void showStartTimeDialog(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        getViewState().showStartTimeIntervalDialog(calendar.getTime());
+        getViewState().showStartTimeDialog(calendar.getTime());
     }
 
-    public void showEndTimeIntervalDialog(Date date) {
+    public void showEndTimeDialog(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        getViewState().showEndTimeIntervalDialog(calendar.getTime());
+        getViewState().showEndTimeDialog(calendar.getTime());
     }
 
-    public void showEndIntervalDialog() {
+    public void showEndDialog() {
         Calendar calendar = Calendar.getInstance();
-        if (mEndIntervalDate != null) {
-            calendar.setTime(mEndIntervalDate);
+        if (mEndDate != null) {
+            calendar.setTime(mEndDate);
         }
-        getViewState().showEndIntervalDateDialog(calendar.getTime());
+        getViewState().showEndDateDialog(calendar.getTime());
     }
 
-    public void loadStatistics() {
+    public void loadStatistics(Interval interval) {
 
-        if (mStartIntervalDate == null) {
-            getViewState().emptyStartInterval();
+        if (mStartDate == null) {
+            getViewState().emptyStartDate();
             return;
         }
 
-        if (mEndIntervalDate == null) {
-            getViewState().emptyEndInterval();
+        if (mEndDate == null) {
+            getViewState().emptyEndDate();
             return;
         }
 
         getViewState().showLoading(true);
         GetStatisticsMethodRequest request = new GetStatisticsMethodRequest();
-        request.setStartInterval(mStartIntervalDate);
-        request.setEndInterval(mEndIntervalDate);
+        request.setStartDate(mStartDate);
+        request.setEndDate(mEndDate);
+        request.setInterval(interval);
 
         final Observable<GetStatisticsMethodResponse> observable = mApiService.getStatisticsMethod(request);
         Disposable disposable = observable

@@ -1,9 +1,9 @@
-package com.eshokin.socs.application.builder.modules.context;
+package com.eshokin.socs.application.di.modules.context;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.eshokin.socs.application.builder.AppScope;
+import com.eshokin.socs.application.di.AppScope;
 
 import dagger.Module;
 import dagger.Provides;

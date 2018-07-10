@@ -47,7 +47,7 @@ public class MockServerInterceptor implements Interceptor {
             String body = getRequestBody(chain.request().body());
             GetStatisticsMethodRequest request = mGson.fromJson(body, GetStatisticsMethodRequest.class);
             if (request != null) {
-                List<Point> points = mCalculating.generateStatistics(request.getStartInterval(), request.getEndInterval());
+                List<Point> points = mCalculating.generateStatistics(request.getStartDate(), request.getEndDate(), request.getInterval());
                 statisticsMethodResponse.getResult().setPoints(points);
                 statisticsMethodResponse.getStatus().setError("ok");
                 statisticsMethodResponse.getStatus().setMessage("ok");

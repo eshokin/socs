@@ -3,11 +3,26 @@
 
     <string name="activity_main_load_button">Load</string>
     <string name="activity_main_select_time">Select time</string>
-    <string name="activity_main_start_interval_error">The starting interval should be less than the final interval</string>
-    <string name="activity_main_end_interval_error">The end interval must be greater than the initial interval</string>
+    <string name="activity_main_start_date_error">The start date must be less than the end date</string>
+    <string name="activity_main_end_date_error">The end date must be greater than the start date</string>
     <string name="activity_main_attention">Attention</string>
     <string name="activity_main_button_ok">OK</string>
     <string name="activity_main_required_field">* Required field</string>
+    <string name="activity_main_min_title">Min:</string>
+    <string name="activity_main_max_title">Max:</string>
+    <string name="activity_main_average_title">Average:</string>
+    <string name="activity_main_median_title">Median:</string>
+    <string name="activity_main_interquartile_range_title">Interquartile range:</string>
+    <string name="activity_main_m1">1 minute</string>
+    <string name="activity_main_m5">5 minutes</string>
+    <string name="activity_main_m15">15 minutes</string>
+    <string name="activity_main_m30">30 minutes</string>
+    <string name="activity_main_h1">1 hour</string>
+    <string name="activity_main_h4">4 hours</string>
+    <string name="activity_main_h12">12 hours</string>
+    <string name="activity_main_d1">1 day</string>
+    <string name="activity_main_start_interval_title">Start interval</string>
+    <string name="activity_main_end_interval_title">End interval</string>
 
     <string name="could_not_retrieve_data">Could not retrieve data for the specified period.</string>
 

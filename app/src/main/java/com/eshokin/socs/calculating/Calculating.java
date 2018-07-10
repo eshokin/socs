@@ -1,5 +1,6 @@
 package com.eshokin.socs.calculating;
 
+import com.eshokin.socs.api.enumerations.Interval;
 import com.eshokin.socs.api.schemas.Point;
 
 import java.util.ArrayList;
@@ -49,15 +50,19 @@ public class Calculating {
         return 0;
     }
 
-    public double getMedian(List<Point> points) {
+    public synchronized double getMedian(List<Point> points) {
         if (points != null && points.size() > 0) {
+            if (points.size() == 1) {
+                return points.get(0).getRate();
+            }
+
             Collections.sort(points, mComparator);
             if (points.size() % 2 == 1) {
-                Point point = points.get((points.size() / 2) + 1);
+                Point point = points.get((points.size() / 2) - 1);
                 return point == null ? 0 : point.getRate();
             } else {
-                Point point1 = points.get((points.size() / 2));
-                Point point2 = points.get((points.size() / 2) + 1);
+                Point point1 = points.get((points.size() / 2) - 1);
+                Point point2 = points.get((points.size() / 2));
                 return point1 != null && point2 != null ? (point1.getRate() + point2.getRate()) / 2 : 0;
             }
         }
@@ -66,26 +71,30 @@ public class Calculating {
 
     public double getInterquartileRange(List<Point> points) {
         if (points != null && points.size() > 0) {
+            if (points.size() == 1) {
+                return points.get(0).getRate();
+            }
             Collections.sort(points, mComparator);
-            int middle = points.size() / 2;
+            int middle = (points.size() / 2);
             List<Point> leftHalf = points.subList(0, middle);
             List<Point> rightHalf = points.subList(middle + points.size() % 2, points.size());
-            double leftHalfMedian = getMedian(rightHalf);
-            double rightHalfMedian = getMedian(leftHalf);
+            double leftHalfMedian = getMedian(leftHalf);
+            double rightHalfMedian = getMedian(rightHalf);
             return rightHalfMedian - leftHalfMedian;
         }
         return 0;
     }
 
-    public List<Point> generateStatistics(Date startInterval, Date endInterval) {
+    public List<Point> generateStatistics(Date startDate, Date endDate, Interval interval) {
         mRange = 100d;
+        int time_interval = interval != null ? interval.getIdentifier() : Interval.H4.getIdentifier();
         List<Point> points = new ArrayList<>();
-        if (startInterval != null && endInterval != null) {
-            long startTime = startInterval.getTime();
-            long endTime = endInterval.getTime();
+        if (startDate != null && endDate != null) {
+            long startTime = startDate.getTime();
+            long endTime = endDate.getTime();
             if (endTime > startTime) {
                 while (endTime >= startTime) {
-                    startTime += 10 * 60 * 1000;
+                    startTime += time_interval;
                     Point point = new Point();
                     point.setDate(new Date(startTime));
                     point.setRate(getRate());
